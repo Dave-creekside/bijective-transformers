@@ -178,8 +178,8 @@ class CheckpointManager:
         
         print(f"📂 Loading checkpoint: {checkpoint_path}")
         
-        # Load checkpoint
-        checkpoint = torch.load(checkpoint_path, map_location=device)
+        # Load checkpoint (use weights_only=False for our trusted checkpoints)
+        checkpoint = torch.load(checkpoint_path, map_location=device, weights_only=False)
         
         # Restore model state
         model.load_state_dict(checkpoint['model_state_dict'])
@@ -281,8 +281,8 @@ class CheckpointManager:
         
         print(f"📦 Loading exported model: {export_path}")
         
-        # Load export data
-        export_data = torch.load(export_path, map_location=device)
+        # Load export data (use weights_only=False for our trusted exports)
+        export_data = torch.load(export_path, map_location=device, weights_only=False)
         
         # Restore model state
         model.load_state_dict(export_data['model_state_dict'])
@@ -329,8 +329,8 @@ class CheckpointManager:
                 continue
                 
             try:
-                # Load checkpoint metadata
-                checkpoint = torch.load(checkpoint_file, map_location='cpu')
+                # Load checkpoint metadata (use weights_only=False for trusted checkpoints)
+                checkpoint = torch.load(checkpoint_file, map_location='cpu', weights_only=False)
                 checkpoints.append({
                     'path': str(checkpoint_file),
                     'epoch': checkpoint.get('epoch', 0),
