@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  bijective-training:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: bijective-transformers:latest
+    container_name: bijective-training
+    
+    # GPU configuration for 2x RTX 4070
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    
+    # Environment variables optimized for workstation
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - CUDA_DEVICE_ORDER=PCI_BUS_ID
+      - TOKENIZERS_PARALLELISM=false
+      - OMP_NUM_THREADS=32
+      - MKL_NUM_THREADS=32
+      - NCCL_DEBUG=INFO
+      - WANDB_PROJECT=bijective-transformers
+      - PYTHONPATH=/workspace
+    
+    # Volume mounts for persistent data
+    volumes:
+      - ./data:/workspace/data
+      - ./models:/workspace/models
+      - ./logs:/workspace/logs
+      - ./experiments:/workspace/experiments
+      - ./configs:/workspace/configs
+      - ./.cache:/workspace/.cache
+    
+    # Working directory
+    working_dir: /workspace
+    
+    # Network configuration
+    network_mode: host
+    
+    # Resource limits optimized for 128GB RAM
+    mem_limit: 120g
+    memswap_limit: 120g
+    shm_size: 32g  # Large shared memory for multi-GPU training
+    
+    # Keep container running
+    tty: true
+    stdin_open: true
+    
+    # Default command
+    command: /bin/bash
+    
+    # Restart policy
+    restart: unless-stopped
+
+  # Optional: TensorBoard service
+  tensorboard:
+    image: tensorflow/tensorflow:latest-gpu
+    container_name: bijective-tensorboard
+    ports:
+      - "6006:6006"
+    volumes:
+      - ./logs:/logs
+    command: tensorboard --logdir=/logs --host=0.0.0.0 --port=6006
+    restart: unless-stopped
+
+  # Optional: Jupyter notebook service
+  jupyter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: bijective-transformers:latest
+    container_name: bijective-jupyter
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''
+    restart: unless-stopped
+
+networks:
+  default:
+    driver: bridge
