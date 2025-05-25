@@ -1,0 +1,35 @@
+# Main configuration file for Bijective Transformers
+# This file orchestrates all other configs
+
+defaults:
+  - model: transformer_base
+  - data: wikitext2
+  - training: baseline
+  - _self_
+
+# Experiment settings
+experiment_name: "discrete_diffusion_baseline"
+seed: 42
+device: "auto"  # auto, cpu, cuda, mps
+
+# Logging
+wandb:
+  enabled: true
+  project: "bijective-transformers"
+  entity: null  # Set your wandb entity here
+  tags: ["baseline", "discrete-diffusion"]
+
+# Paths
+paths:
+  data_dir: "data"
+  model_dir: "models"
+  log_dir: "logs"
+  output_dir: "outputs"
+
+# Hydra configuration
+hydra:
+  run:
+    dir: outputs/${experiment_name}/${now:%Y-%m-%d_%H-%M-%S}
+  sweep:
+    dir: outputs/${experiment_name}/sweeps
+    subdir: ${hydra.job.num}

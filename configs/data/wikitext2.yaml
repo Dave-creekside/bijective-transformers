@@ -1,0 +1,70 @@
+# WikiText-2 dataset configuration
+# Small dataset for initial testing and development
+
+# Dataset settings
+dataset_name: "wikitext"
+dataset_config: "wikitext-2-raw-v1"
+tokenizer_name: "gpt2"
+
+# Data processing
+max_length: 512
+stride: 256  # For sliding window if needed
+padding: "max_length"
+truncation: true
+
+# Data splits
+train_split: "train"
+validation_split: "validation" 
+test_split: "test"
+
+# Batch settings
+batch_size: 8
+eval_batch_size: 16
+num_workers: 4
+pin_memory: true
+
+# Data loading
+shuffle_train: true
+shuffle_eval: false
+drop_last: true
+
+# Corruption settings for discrete diffusion
+corruption:
+  # Noise types to apply
+  noise_types: ["mask", "substitute", "delete"]
+  
+  # Masking corruption
+  mask:
+    prob: 0.15  # Probability of masking a token
+    mask_token: "[MASK]"
+    random_token_prob: 0.1  # Replace with random token instead of [MASK]
+    keep_original_prob: 0.1  # Keep original token
+  
+  # Substitution corruption  
+  substitute:
+    prob: 0.1  # Probability of substituting a token
+    vocab_sample: true  # Sample from full vocabulary
+  
+  # Deletion corruption
+  delete:
+    prob: 0.05  # Probability of deleting a token
+    max_deletions: 0.2  # Maximum fraction of sequence to delete
+  
+  # Noise scheduling
+  num_timesteps: 1000
+  schedule_type: "linear"  # linear, cosine, sqrt
+  min_noise: 0.01
+  max_noise: 0.99
+
+# Preprocessing
+preprocessing:
+  lowercase: false
+  remove_special_chars: false
+  min_length: 10  # Minimum sequence length
+  max_length: 512  # Maximum sequence length
+  filter_empty: true
+
+# Caching
+cache_dir: "data/cache"
+use_cache: true
+overwrite_cache: false

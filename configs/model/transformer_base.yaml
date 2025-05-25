@@ -1,0 +1,41 @@
+# Base bidirectional transformer configuration
+# Optimized for discrete diffusion text denoising
+
+# Model architecture
+vocab_size: 50257  # GPT-2 tokenizer vocab size
+max_seq_length: 512
+embed_dim: 768
+num_layers: 12
+num_heads: 12
+feedforward_dim: 3072
+
+# Attention configuration
+attention_dropout: 0.1
+residual_dropout: 0.1
+embed_dropout: 0.1
+
+# Bidirectional attention (no causal masking)
+causal_mask: false
+use_flash_attention: true  # Use flash attention if available
+
+# Time embedding for diffusion
+time_embed_dim: 256
+time_embed_type: "sinusoidal"  # sinusoidal, learned
+
+# Layer normalization
+layer_norm_eps: 1e-5
+pre_norm: true  # Pre-norm vs post-norm
+
+# Initialization
+init_std: 0.02
+init_bias: 0.0
+
+# Model type
+model_type: "bidirectional_transformer"
+
+# Activation function
+activation: "gelu"
+
+# Position embeddings
+max_position_embeddings: 1024
+position_embedding_type: "absolute"  # absolute, relative, rotary
