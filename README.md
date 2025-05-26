@@ -19,13 +19,13 @@ A complete implementation of bijective discrete diffusion models for text genera
 ## 🚀 Quick Start
 
 ### Option 1: Google Colab (Easiest)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/your-username/bijective-transformers/blob/main/Bijective_Discrete_Diffusion_Colab_Fixed.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Dave-creekside/bijective-transformers/blob/main/notebooks/Bijective_Discrete_Diffusion_Complete.ipynb)
 
 Click the badge above for zero-setup training in your browser.
 
 ### Option 2: Local Training
 ```bash
-git clone https://github.com/your-username/bijective-transformers.git
+git clone https://github.com/Dave-creekside/bijective-transformers.git
 cd bijective-transformers
 pip install -r requirements.txt
 
@@ -38,7 +38,7 @@ python train_bijective_with_checkpoints.py --resume latest --epochs 20
 
 ### Option 3: Workstation (2x RTX 4070)
 ```bash
-git clone https://github.com/your-username/bijective-transformers.git
+git clone https://github.com/Dave-creekside/bijective-transformers.git
 cd bijective-transformers
 
 # Docker deployment with multi-GPU support
@@ -50,7 +50,7 @@ docker exec -it bijective-training python train_bijective_workstation.py
 
 | File | Purpose |
 |------|---------|
-| `Bijective_Discrete_Diffusion_Colab_Fixed.ipynb` | 📓 Interactive Colab notebook |
+| `notebooks/Bijective_Discrete_Diffusion_Complete.ipynb` | 📓 Interactive Colab notebook (configurable model sizes) |
 | `train_bijective_with_checkpoints.py` | 💾 Local training with save/load |
 | `train_bijective_workstation.py` | 🖥️ Multi-GPU workstation training |
 | `src/models/bijective_diffusion_fixed.py` | 🧠 Core bijective diffusion model |
@@ -154,7 +154,7 @@ bijective-transformers/
 │   └── layers/invertible.py                  # Bijective layers
 ├── train_bijective_with_checkpoints.py       # Local training
 ├── train_bijective_workstation.py            # Multi-GPU training
-├── Bijective_Discrete_Diffusion_Colab_Fixed.ipynb  # Colab notebook
+├── notebooks/Bijective_Discrete_Diffusion_Complete.ipynb # Colab notebook (configurable models)
 ├── Dockerfile                                # Container setup
 ├── docker-compose.yml                        # Multi-service deployment
 └── WORKSTATION_SETUP.md                     # Deployment guide
@@ -183,9 +183,10 @@ If you use this work in your research, please cite:
 ```bibtex
 @misc{bijective-discrete-diffusion,
   title={Bijective Discrete Diffusion Models for Text Generation},
-  author={Your Name},
+  author={Dave Wilson 
+ clockwork.earth},
   year={2024},
-  url={https://github.com/your-username/bijective-transformers}
+  url={https://github.com/Dave-creekside/bijective-transformers}
 }
 ```
 
