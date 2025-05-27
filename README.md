@@ -53,7 +53,6 @@ docker exec -it bijective-training python train_bijective_workstation.py
 | `notebooks/Bijective_Discrete_Diffusion_Complete.ipynb` | 📓 Interactive Colab notebook (configurable model sizes) |
 | `train_bijective_with_checkpoints.py` | 💾 Local training with save/load |
 | `train_bijective_workstation.py` | 🖥️ Multi-GPU workstation training |
-| `src/models/bijective_diffusion_fixed.py` | 🧠 Core bijective diffusion model |
 | `src/utils/checkpoint.py` | 💾 Comprehensive checkpoint system |
 | `WORKSTATION_SETUP.md` | 📋 Detailed workstation deployment guide |
 
