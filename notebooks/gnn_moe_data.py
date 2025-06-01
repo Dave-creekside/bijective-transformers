@@ -83,6 +83,10 @@ def load_data(config): # config is a GNNMoEConfig instance
         
     except Exception as e:
         print(f"⚠️ Real data ({config.dataset_config_name}) loading failed: {e}")
+        import traceback # Add this for detailed error logging
+        print("--- Full Traceback for Data Loading Failure ---")
+        traceback.print_exc() # Add this to print full traceback
+        print("---------------------------------------------")
         print("🔄 Using synthetic fallback...")
         from transformers import AutoTokenizer # Ensure tokenizer is available for fallback
         tokenizer = AutoTokenizer.from_pretrained('gpt2')

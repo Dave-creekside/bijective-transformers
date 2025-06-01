@@ -9,6 +9,7 @@ Analysis and visualization utilities for GNN-Coupled MoE models.
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import torch # Added import
 
 # Assuming GNNMoEConfig and model class GNNMoEModel will be imported in the main script
 # from gnn_moe_config import GNNMoEConfig
