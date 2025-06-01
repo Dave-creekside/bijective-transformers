@@ -70,7 +70,7 @@ def load_checkpoint(checkpoint_path, model, optimizer=None, scheduler=None):
         return None
     
     print(f"🔄 Loading checkpoint from '{checkpoint_path}'")
-    checkpoint = torch.load(checkpoint_path, map_location=lambda storage, loc: storage) # Load to CPU first
+    checkpoint = torch.load(checkpoint_path, map_location=lambda storage, loc: storage, weights_only=False) # Load to CPU first, added weights_only=False
     
     model.load_state_dict(checkpoint['model_state_dict'])
     
@@ -544,8 +544,13 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
 
+    # Ensure the specified checkpoint directory exists
+    if not os.path.exists(args.checkpoint_dir):
+        os.makedirs(args.checkpoint_dir)
+        print(f"📁 Created checkpoint directory: {args.checkpoint_dir}")
+
     print("===== GNN-MoE WikiText-2 Script Execution Started =====")
-    selected_device = setup_environment(seed=42) # also creates ./checkpoints if not exists
+    selected_device = setup_environment(seed=42) # also creates ./plots and default ./checkpoints if not exists
     cfg = GNNMoEConfig() # Base config
     
     # Example of overriding config with args if they were added to parser:
@@ -606,16 +611,16 @@ if __name__ == "__main__":
     print(f"   Data Mode: {data_mode}"); print(f"   Best Eval Loss from run: {final_best_loss:.4f}")
     # To print the absolute best perplexity, it should be saved/loaded with the checkpoint state
     # For now, we print perplexity if stats are available from the current run
-    if training_stats and 'eval_perplexity' in training_stats and stats['eval_perplexity']:
+    if training_stats and 'eval_perplexity' in training_stats and training_stats['eval_perplexity']: # Corrected: stats -> training_stats
         # Find perplexity corresponding to the best_eval_loss if possible
         # This is a bit simplified; proper way is to save PPL with checkpoint.
         try:
-            best_loss_idx = stats['eval_loss'].index(final_best_loss)
-            best_ppl_from_run = stats['eval_perplexity'][best_loss_idx]
+            best_loss_idx = training_stats['eval_loss'].index(final_best_loss) # Corrected: stats -> training_stats
+            best_ppl_from_run = training_stats['eval_perplexity'][best_loss_idx] # Corrected: stats -> training_stats
             print(f"   Best Eval Perplexity from run: {best_ppl_from_run:.2f}")
         except (ValueError, IndexError):
-             if stats['eval_perplexity']: # Fallback to min PPL if exact match not found
-                 print(f"   Min Eval Perplexity from run: {min(stats['eval_perplexity']):.2f}")
+             if training_stats['eval_perplexity']: # Fallback to min PPL if exact match not found; Corrected: stats -> training_stats
+                 print(f"   Min Eval Perplexity from run (fallback): {min(training_stats['eval_perplexity']):.2f}") # Corrected: stats -> training_stats
     print("==============================================")
 else:
     print("GNN-MoE WikiText-2 script imported as a module.")
